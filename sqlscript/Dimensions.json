@@ -1,0 +1,17 @@
+{
+	"name": "Dimensions",
+	"properties": {
+		"content": {
+			"query": "------- DIM Customer-----------------\n\nIF NOT EXISTS(SELECT * FROM sys.tables t join sys.schemas s on t.schema_id=s.schema_id where \n    t.name='DimCustomer' and s.name='gold')\n    CREATE EXTERNAL TABLE gold.DimCustomer \n    WITH(\n        LOCATION='DimCustomer',\n        DATA_SOURCE=GOLD_SOURCE,\n        FILE_FORMAT=PARQUET_FORMAT\n    )\n    AS \n    SELECT *,ROW_NUMBER() OVER(ORDER BY C.CustomerID) as DimCustomerKey\n    from (\n        SELECT \n            DISTINCT CustomerID,\n            CustomerName,\n            CustomerEmail,\n            Domain     \n    from silver.silverTable) as C;   \n\n------- DIM Product-----------------\n\nIF NOT EXISTS(SELECT * FROM sys.tables t join sys.schemas s on t.schema_id=s.schema_id where \n    t.name='DimProduct' and s.name='gold')\n    CREATE EXTERNAL TABLE gold.DimProduct \n    WITH(\n        LOCATION='DimProduct',\n        DATA_SOURCE=GOLD_SOURCE,\n        FILE_FORMAT=PARQUET_FORMAT\n    )\n    AS \n    SELECT *,ROW_NUMBER() over(order by P.ProductID) as DimProductKey\n    from (\n        select \n        DISTINCT ProductID,\n        ProductName,\n        ProductCategory\n    from silver.silverTable) as P;  \n\n------- DIM Geography-----------------\n\nIF NOT EXISTS(SELECT * FROM sys.tables t join sys.schemas s on t.schema_id=s.schema_id where \n    t.name='DimGeography' and s.name='gold')\n    CREATE EXTERNAL TABLE gold.DimGeography \n    WITH(\n        LOCATION='DimGeography',\n        DATA_SOURCE=GOLD_SOURCE,\n        FILE_FORMAT=PARQUET_FORMAT\n    )\n    AS \n    select *,ROW_NUMBER() OVER(order by G.RegionID) as DimGeographyKey \n    from \n        (SELECT \n        DISTINCT RegionID,\n        RegionName,\n        Country\n    from silver.silverTable) G;  \n\n\n------- DIM Orders-----------------\ndrop EXTERNAL table gold.DimOrders; \nselect * from gold.DimOrders ;\n\nIF NOT EXISTS(SELECT * FROM sys.tables t join sys.schemas s on t.schema_id=s.schema_id where \n    t.name='DimOrders' and s.name='gold')\n    CREATE EXTERNAL TABLE gold.DimOrders \n    WITH(\n        LOCATION='DimOrders',\n        DATA_SOURCE=GOLD_SOURCE,\n        FILE_FORMAT=PARQUET_FORMAT\n    )\n    AS \n    select *,ROW_NUMBER() over(order by O.OrderID) as DimOrdersKey\n    from ( \n    SELECT \n        OrderID,\n        OrderDate,\n        CustomerID,\n        CustomerName,\n        CustomerEmail,\n        Domain,\n        ProductID,\n        ProductName,\n        ProductCategory,\n        RegionID,\n        RegionName,\n        Country\n    from silver.silverTable) as O;      \n\n\nselect * from  gold.DimOrders;\n",
+			"metadata": {
+				"language": "sql"
+			},
+			"currentConnection": {
+				"databaseName": "SalesDatawarehouse",
+				"poolName": "Built-in"
+			},
+			"resultLimit": 5000
+		},
+		"type": "SqlQuery"
+	}
+}

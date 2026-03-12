@@ -1,0 +1,17 @@
+{
+	"name": "Schema_Scripts",
+	"properties": {
+		"content": {
+			"query": "CREATE SCHEMA Silver;\nCREATE SCHEMA Gold;",
+			"metadata": {
+				"language": "sql"
+			},
+			"currentConnection": {
+				"databaseName": "SalesDatawarehouse",
+				"poolName": "Built-in"
+			},
+			"resultLimit": 5000
+		},
+		"type": "SqlQuery"
+	}
+}

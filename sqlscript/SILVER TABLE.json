@@ -1,0 +1,17 @@
+{
+	"name": "SILVER TABLE",
+	"properties": {
+		"content": {
+			"query": "-- This is auto-generated code\nSELECT\n    TOP 100 *\nFROM\n    OPENROWSET(\n        BULK 'enrichedSales',\n        DATA_SOURCE='SILVER_SOURCE',\n        FORMAT = 'PARQUET'\n    ) AS [result];\n\n\nCREATE EXTERNAL TABLE Silver.SilverTable\n(\n    OrderID VARCHAR(100),\n    OrderDate DATETIME2,\n    CustomerID VARCHAR(100),\n    CustomerName VARCHAR(100),\n    CustomerEmail VARCHAR(100),\n    ProductID VARCHAR(100),\n    ProductName VARCHAR(100),\n    ProductCategory VARCHAR(100),\n    RegionID VARCHAR(100),\n    RegionName VARCHAR(100),\n    Country VARCHAR(100),\n    Quantity VARCHAR(100),\n    UnitPrice INT,\n    TotalAmount INT,\n    Domain VARCHAR(100)\n)\nWITH( \n    LOCATION='enrichedSales',\n    DATA_SOURCE=SILVER_SOURCE,\n    FILE_FORMAT = PARQUET_FORMAT\n);",
+			"metadata": {
+				"language": "sql"
+			},
+			"currentConnection": {
+				"databaseName": "SalesDatawarehouse",
+				"poolName": "Built-in"
+			},
+			"resultLimit": 5000
+		},
+		"type": "SqlQuery"
+	}
+}

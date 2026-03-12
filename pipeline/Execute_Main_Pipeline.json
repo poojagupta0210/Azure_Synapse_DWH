@@ -1,0 +1,72 @@
+{
+	"name": "Execute_Main_Pipeline",
+	"properties": {
+		"activities": [
+			{
+				"name": "RawIngestion",
+				"type": "ExecutePipeline",
+				"dependsOn": [],
+				"policy": {
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "RawIngestion",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true
+				}
+			},
+			{
+				"name": "TransformationLayer",
+				"type": "ExecutePipeline",
+				"dependsOn": [
+					{
+						"activity": "RawIngestion",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "TransformationLayer",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true
+				}
+			},
+			{
+				"name": "CuratedLayer",
+				"type": "ExecutePipeline",
+				"dependsOn": [
+					{
+						"activity": "TransformationLayer",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "CuratedLayer",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true
+				}
+			}
+		],
+		"annotations": [],
+		"lastPublishTime": "2026-03-12T17:15:48Z"
+	},
+	"type": "Microsoft.Synapse/workspaces/pipelines"
+}

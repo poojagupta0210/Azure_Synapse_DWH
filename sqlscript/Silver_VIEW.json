@@ -1,0 +1,17 @@
+{
+	"name": "Silver_VIEW",
+	"properties": {
+		"content": {
+			"query": "IF NOT EXISTS(SELECT * FROM sys.tables t join sys.schemas s on s.schema_id=t.schema_id where s.name='Silver' and t.name='SilverTable')\n    CREATE EXTERNAL TABLE Silver.SilverTable\n    (\n        OrderID VARCHAR(100),\n        OrderDate DATETIME2,\n        CustomerID VARCHAR(100),\n        CustomerName VARCHAR(100),\n        CustomerEmail VARCHAR(100),\n        ProductID VARCHAR(100),\n        ProductName VARCHAR(100),\n        ProductCategory VARCHAR(100),\n        RegionID VARCHAR(100),\n        RegionName VARCHAR(100),\n        Country VARCHAR(100),\n        Quantity VARCHAR(100),\n        UnitPrice INT,\n        TotalAmount INT,\n        Domain VARCHAR(100)\n    )\n    WITH( \n        LOCATION='enrichedSales',\n        DATA_SOURCE=SILVER_SOURCE,\n        FILE_FORMAT = PARQUET_FORMAT\n    );",
+			"metadata": {
+				"language": "sql"
+			},
+			"currentConnection": {
+				"databaseName": "SalesDatawarehouse",
+				"poolName": "Built-in"
+			},
+			"resultLimit": 5000
+		},
+		"type": "SqlQuery"
+	}
+}

@@ -1,0 +1,17 @@
+{
+	"name": "ExternalResources",
+	"properties": {
+		"content": {
+			"query": "---------------CREATING MASTER KEY--------------\nCREATE MASTER KEY ENCRYPTION BY PASSWORD='Puja@02gupta#MaheepTrisha2027';\n\n----------------SCOPED CREDENTIAL----------------\nCREATE DATABASE SCOPED CREDENTIAL POOJA_CREDS\nWITH IDENTITY='Managed Identity';\n\n-------------EXTERNAL DATA SOURCE SILVER--------------\nCREATE EXTERNAL DATA SOURCE SILVER_SOURCE\nWITH (\n    LOCATION='https://azuredwhing.dfs.core.windows.net/silver/',\n    CREDENTIAL=POOJA_CREDS\n);\n\n\n-------------EXTERNAL DATA SOURCE GOLD--------------\nCREATE EXTERNAL DATA SOURCE GOLD_SOURCE\nWITH (\n    LOCATION='https://azuredwhing.dfs.core.windows.net/gold/',\n    CREDENTIAL=POOJA_CREDS\n);\n\n\n-------------EXTERNAL FILE FORMAT--------------\n-----1-----PARQUET FORMAT----------\nCREATE EXTERNAL FILE FORMAT PARQUET_FORMAT\nWITH(\n    FORMAT_TYPE=PARQUET,\n    DATA_COMPRESSION='org.apache.hadoop.io.compress.SnappyCodec'\n);\n\n-----2-----DELTA FORMAT----------\nCREATE EXTERNAL FILE FORMAT DELTA_FORMAT\nWITH(\n    FORMAT_TYPE=DELTA\n);\n",
+			"metadata": {
+				"language": "sql"
+			},
+			"currentConnection": {
+				"databaseName": "SalesDatawarehouse",
+				"poolName": "Built-in"
+			},
+			"resultLimit": 5000
+		},
+		"type": "SqlQuery"
+	}
+}
